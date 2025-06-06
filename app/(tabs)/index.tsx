@@ -2,7 +2,7 @@ import { fetchNowPlaying } from "@/api/movies";
 import Logo from "@/components/atoms/Logo";
 import MovieBanner from "@/components/molecules/MovieBanner";
 import MovieList from "@/components/organisms/MovieList";
-import { MovieType } from "@/types/movieType";
+import sortMoviesAlf from "@/utils/sortMoviesAlf";
 import Constants from "expo-constants";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -26,18 +26,8 @@ export default function HomeScreen() {
     const getMovies = async () => {
       try {
         const movies = await fetchNowPlaying();
-        movies.sort((a: MovieType, b: MovieType) => {
-          const titleA = a.title.toUpperCase();
-          const titleB = b.title.toUpperCase();
-          if (titleA < titleB) {
-            return -1;
-          }
-          if (titleA > titleB) {
-            return 1;
-          }
-          return 0;
-        });
-        setNowPlaying(movies);
+        const sortedMovies = sortMoviesAlf(movies);
+        setNowPlaying(sortedMovies);
       } catch (error) {
         console.error("Error", error);
       } finally {
